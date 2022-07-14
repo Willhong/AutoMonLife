@@ -1,0 +1,7 @@
+Ver1/image/*
+Ver2/image/*
+Ver1/__pycache__
+Ver2/__pycache__
+__pycache__
+Ver1.zip
+Ver1/*.jpg
