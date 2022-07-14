@@ -1,6 +1,9 @@
 # AutoMonLife
-## 목차
+메이플스토리 몬스터라이프 농장을 검색 
 
+
+
+## 목차
 
 * [OpenCV](https://github.com/Willhong/AutoMonLife/blob/master/Ver1/opencv_hong.py)   
 OpenCV 라이브러리 함수 구현
