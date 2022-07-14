@@ -7,18 +7,21 @@ from ctypes import windll
 
 import ctypes
 
-
+#한글 자모 합치기
 def hangul_compose(text):
     return hgtk.text.compose(text)
 
+#한글 자모 분해
 def hangul_decompose(text):
     return hgtk.text.decompose(text,compose_code='')
 
+#키보드 한영
 def Set_Keyboard_Language():
     time.sleep(0.1)
     win32api.keybd_event(15,0,0,0)     # enter
     win32api.keybd_event(15,0,win32con.KEYEVENTF_KEYUP,0)  # Release the button 
 
+#키보드 현재 입력언어  리턴
 def get_keyboard_language():
     languages = {'0x409' : "English - United States", '0x809' : "English - United Kingdom", '0x0c09' : "English - Australia", '0x2809' : "English - Belize",
                  '0x1009' : "English - Canada", '0x2409' : "English - Caribbean", '0x3c09' : "English - Hong Kong SAR", '0x4009' : "English - India", '0x3809' : "English - Indonesia",
@@ -66,6 +69,7 @@ def get_keyboard_language():
     if language_id_hex in languages.keys():
         return languages[language_id_hex]
 
+#자음 모음 영어로 변환
 def convertToEnglish(word):
     result=[]
     key={'a':'ㅁ','q':'ㅂ','w':'ㅈ','e':'ㄷ','r':'ㄱ','t':'ㅅ','y':'ㅛ','u':'ㅕ','i':'ㅑ','o':'ㅐ',
@@ -84,16 +88,17 @@ user32.SetProcessDPIAware()
 shell = win32com.client.Dispatch("WScript.Shell")
 shell.SendKeys('%')
 
+#클립보드에 문자 저장
 def SetClipboard(text):
     win32clipboard.OpenClipboard()
     win32clipboard.SetClipboardText(text,win32clipboard.CF_UNICODETEXT)
     win32clipboard.CloseClipboard()
 
-    
+#파일 유무 확인
 def FileExist(filename):
     return win32api.FindFiles(filename)
 
-
+#파일 쓰기
 def FileWrite(filename,data):
     f = open(filename, 'w',encoding='utf8')
     for i in data:
@@ -101,6 +106,7 @@ def FileWrite(filename,data):
         f.write(sData+'\n')
     f.close()
     
+#파일 읽기
 def FileRead(filename):
     f = open(filename, 'r',encoding='utf8')
     list=[]
@@ -109,6 +115,7 @@ def FileRead(filename):
     f.close()
     return list
 
+# 윈도우 핸들 포커스
 def SetFocus(handle):
 
     win32gui.SetFocus(handle)
@@ -129,17 +136,19 @@ def mouse_Rclick(x, y):
     win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN, x, y, 0, 0)
     win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP, x, y, 0, 0)
 
+#마우스 휠 입력
 def mouse_Wheeel(x,y,up,count):
     win32api.SetCursorPos((x, y))
     for i in range(count):
         win32api.mouse_event(win32con.MOUSEEVENTF_WHEEL, 0, 0, win32con.WHEEL_DELTA if up=="up" else -win32con.WHEEL_DELTA , 0)
         time.sleep(0.02)
-
+#엔터키 입력
 def key_input_enter():
     time.sleep(0.1)
     win32api.keybd_event(13,0,0,0)     # enter
     win32api.keybd_event(13,0,win32con.KEYEVENTF_KEYUP,0)  # Release the button 
 
+#문자열 키보드입력
 def key_input_Type(FarmName):
     time.sleep(0.1)
     a= Controller()
@@ -152,7 +161,7 @@ def key_input_Type(FarmName):
     #paste
 
 
-
+#마우스 현재 좌표 출력
 def print_mouse_position():
     pos = win32api.GetCursorPos()
     print(pos)
@@ -160,6 +169,7 @@ def print_mouse_position():
 def SetForeground(handle):
     win32gui.SetForegroundWindow(handle)
 
+#윈도우 화면 캡처, 이미지,좌표 리턴
 def WindowCapture(window_name):
     global globalx
     global globaly
