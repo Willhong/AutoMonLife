@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 
+#이미지를 Mat 형식으로 불러와 사용
 def imRead(loc,mode):
     type=''
     if(mode=='Gray'):
@@ -12,6 +13,7 @@ def imRead(loc,mode):
 
     return cv2.imread(loc,type)
 
+#이미지를 Crop 시켜 관심영역 설정
 def subMat(img, rect):
     x=rect[0]
     y=rect[1]
@@ -20,6 +22,7 @@ def subMat(img, rect):
     crop=img[y:y+height,x:x+width]
     return crop
 
+#이미지 매칭해 좌표값 리턴
 def coorTemplateMatch(img,tmp,threshold):
     res = cv2.matchTemplate(img,tmp,cv2.TM_CCOEFF_NORMED)
     minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(res)
@@ -33,7 +36,7 @@ def coorTemplateMatch(img,tmp,threshold):
         return result_X,result_Y,img
 
 
-
+#이미지 매칭해 존재 유무 bool 리턴
 def bTemplateMatch(img,tmp,threshold):
     try:
         res = cv2.matchTemplate(img,tmp,cv2.TM_CCOEFF_NORMED)
@@ -49,10 +52,12 @@ def bTemplateMatch(img,tmp,threshold):
     #cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0,0,255), 2) #박스표시하기
     return True if maxVal>threshold else False
 
+#이미지 확대/축소
 def Resize(img,mul):
     resize=cv2.resize(img, dsize=(0, 0), fx=mul, fy=mul, interpolation=cv2.INTER_LINEAR)
     return resize
-    
+
+#이미지 선명하게
 def Sharpening(img,mode,arg):
     sharpening_mask1 = np.array([[-1, -1, -1], [-1, arg, -1], [-1, -1, -1]]) 
     sharpening_mask2 = np.array([[0, -1, 0], [-1, arg, -1], [0, -1, 0]])
