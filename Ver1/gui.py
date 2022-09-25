@@ -1,4 +1,5 @@
 import sys
+import threading
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QTextEdit,QLabel,QGridLayout,QLineEdit,QListWidget,QCheckBox
 from PyQt5.QtCore import Qt
 import main
@@ -28,12 +29,13 @@ class MyApp(QWidget):
         self.tbox3=QTextEdit()
         self.tbox4=QTextEdit()
         self.tbox5=QTextEdit()
+        self.qlabel=QLabel('목록:')
     def initUI(self):
         grid = QGridLayout()
         self.setLayout(grid)
 
         grid.addWidget(QLabel('몬스터 검색'), 0, 0)
-        grid.addWidget(QLabel('목록:'), 1, 0)
+        grid.addWidget(self.qlabel, 1, 0)
         grid.addWidget(QLabel('반복횟수:'), 2, 0)
         grid.addWidget(QLabel('몬스터 필터링: \',\'로 구분'), 3, 0)
         
@@ -75,7 +77,7 @@ class MyApp(QWidget):
         self.setGeometry(300, 300, 800, 400)
         self.show()
 
-
+    
     def TestButtonClick(self):
         main.clicktest=True
         main.clickEvent.set()
@@ -101,16 +103,26 @@ class MyApp(QWidget):
         main.monfilter=self.tbox1.text()+','+self.tbox3.toPlainText()
 
     def btnRun_clicked(self):
+        global MixFlag
+        MixFlag= True
         self.setFliter()
         self.ClearList()
         if self.RenewFarmList.isChecked():
             if wh.FileExist('./list/'+self.tbox1.text()+'.txt'):
                 os.remove('./list/'+self.tbox1.text()+'.txt')
         monsterlist=main.GetMonsterList(self.tbox1.text())
+        listcount=0
         for i in monsterlist:
+            listcount=listcount+1
             self.listbox.addItem(str(i))
+        self.qlabel.setText('목록: '+str(listcount)+'개')
+        
 
-    def ListClicked(self):
+    def ListClickedFunc(self):
+        global MixFlag
+        MixFlag=False
+        listcount=0
+
         self.setFliter()
         if not self.AutoCheck.isChecked():
             SelectedItem=self.listbox.currentItem().text()
@@ -119,7 +131,9 @@ class MyApp(QWidget):
             self.ClearList()
             monsterlist=main.GetMonsterList(self.tbox1.text())
             for i in monsterlist:
+                listcount=listcount+1
                 self.listbox.addItem(str(i))
+            self.qlabel.setText('목록: '+str(listcount)+'개')
         else:
             self.setFliter()
             main.RemoveFinishedMonsterFromList(self.tbox1.text())
@@ -128,7 +142,10 @@ class MyApp(QWidget):
             self.ClearList()
             monsterlist=main.GetMonsterList(self.tbox1.text())
             for i in monsterlist:
+                listcount=listcount+1
                 self.listbox.addItem(str(i))
+            self.qlabel.setText('목록: '+str(listcount)+'개')
+            
 
             try:
                 count=int(self.tbox2.toPlainText())
@@ -136,6 +153,8 @@ class MyApp(QWidget):
                 count=999
             
             for i in range(count):
+                if MixFlag:
+                    break
                 if not main.isMonFull:
                     self.MixMonster()
                     while True:
@@ -146,14 +165,23 @@ class MyApp(QWidget):
                             main.time.sleep(6)
                             self.ClearList()
                             monsterlist=main.GetMonsterList(self.tbox1.text())
+                            listcount=0
                             for j in monsterlist:
+                                listcount=listcount+1
                                 self.listbox.addItem(str(j))
+                            self.qlabel.setText('목록: '+str(listcount)+'개')
+                            
                             main.MixFinished=False
                             break
 
                 else:
                     main.isMonFull=False
                     break
+
+    def ListClicked(self):
+        global ListClickedThread
+        ListClickedThread=threading.Thread(target=self.ListClickedFunc)
+        ListClickedThread.start()
                     
     def ClearList(self):
         self.listbox.clear()

@@ -224,7 +224,7 @@ def MixSpecialMonster(monster):
             if oh.bTemplateMatch(ScreenshotMain(),warning,0.8):
                 isMonFull=True
                 print('Full')
-                return "FULL"
+                return "Full"
 
           
             wh.key_input_enter()
@@ -330,11 +330,15 @@ def MixMonsterSequence():
                     break                
                 if(monster.monlist[mon]==i):
                     # if CheckSpecial(i):
-                    MixSpecialMonster(cv2.imread(i,1))
+                    print(mon+' Found')
+                    
+                    result=MixSpecialMonster(cv2.imread(i,1))
+                    if result=='full':
+                        return 'full'
                     # else:
                         # MixNormalMonster(cv2.imread(i,1),monster.NormalMonster[inv_key[i]])
                 else:
-                    print('no'+ monfilter)
+                    print(mon+' Not Found')
             except:
                 print('No Monster')
     MixNextPage()
@@ -482,7 +486,9 @@ def MixMonsterWhile():
             MixMonsterEvent.wait()
             if MixMonsterFlag:
                 for i in range(4):
-                    MixMonsterSequence()
+                    result=MixMonsterSequence()
+                    if result=='full':
+                        return
                 MixMonsterFlag=False
                 MixFinished=True
     except:

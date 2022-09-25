@@ -13,7 +13,7 @@ monlist={
     '장난감 흑기사':'./image/mon_toysoldier.PNG',
     '아우프헤벤':'./image/mon_aupuheaven.PNG',
     '피에르':'./image/mon_pier.PNG',
-    '까마귀':'./image/mon_Crow.PNG',
+    '도둑까마귀':'./image/mon_Crow.PNG',
     '에피네아':'./image/mon_Epinaea.PNG',
     '쁘띠 루미너스(빛)':'./image/mon_LuminousLight.PNG',
     '시간의 눈':'./image/mon_Sinoon.PNG',
@@ -29,7 +29,13 @@ monlist={
     '바이킹 군단':'./image/mon_VikingGoondan.PNG',
     '진지한 바이킹':'./image/mon_SeriousViking.PNG',
     '파풀라투스의 시계':'./image/mon_PapulaTooth.PNG',
-    '오베론':'./image/mon_oberon.png'
+    '오베론':'./image/mon_oberon.png',
+    '타르가':'./image/mon_targa.png',
+    '총리대신':'./image/mon_chonglee.png',
+    '쁘띠 오르카':'./image/mon_Orca.png',
+    '작은 운영자 벌룬':'./image/mon_smallgmballoon.png'
+
+    
 
 
 }
